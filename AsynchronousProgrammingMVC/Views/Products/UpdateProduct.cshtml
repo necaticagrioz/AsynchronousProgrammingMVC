@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "UpdateProduct";
+}
+@model UpdateProductDTO
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Ürün Güncelle</h3>
+            </div>
+            <form asp-action="UpdateProduct" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Image" />
+                <input type="hidden" asp-for="CreatedDate" />
+                <input type="hidden" asp-for="UpdatedDate" />
+
+                <div class="card-body">
+                    <div>
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" placeholder="Ürün adı giriniz..." />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Description" class="form-label"></label>
+                        <input asp-for="Description" class="form-control" placeholder="Ürün açıklaması giriniz..." />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label asp-for="UnitPrice" class="form-label"></label>
+                        <input asp-for="UnitPrice" class="form-control" />
+                        <span asp-validation-for="UnitPrice" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label asp-for="CategoryId" class="form-label">Kategori</label>
+                        <select asp-for="CategoryId" class="form-control">
+                            <option value="0" disabled="disabled">Bir Kategori Seçiniz</option>
+                            @if (Model.Categories is not null)
+                            {
+                                @foreach (var category in Model.Categories)
+                                {
+                                    @if (Model.CategoryId == category.Id)
+                                    {
+                                        <option selected="selected" value="@category.Id">@category.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@category.Id">@category.Name</option>
+                                    }
+
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label asp-for="UploadImage" class="form-label"></label>
+                        <input asp-for="UploadImage" onchange="loadFile(event)" class="form-control" />
+                        <span asp-validation-for="UploadImage" class="text-danger"></span>
+                    </div>
+                    <div class="mt-2">
+                        <img id="output" width="100" src="/images/@Model.Image" />
+                    </div>
+                </div>
+                <div class="card-footer" style="height:50px;">
+                    <input type="submit" class="btn btn-outline-success float-end" value="Kaydet" />
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-outline-info float-start">Geri Dön</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts
+    {
+    <script>
+        var loadFile = function (event) {
+            var output = document.getElementById('output');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src);
+            }
+        }
+    </script>
+}

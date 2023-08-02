@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "ProductsByCategory";
+}
+@model List<ProductsByCategoryVM>
+
+<div class="row">
+    <div class="col-md-3 col-sm-12">
+        <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style=" height:100vh;">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap" /></svg>
+                <span class="fs-4">Kategoriler</span>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+                @foreach (var category in Model.FirstOrDefault(x => x.Categories is not null).Categories)
+                    {
+                    <li class="nav-item">
+                        <a asp-controller="Products" asp-action="ProductsByCategory" asp-route-id="@category.Id" class="nav-link active" aria-current="page">
+                            <svg class="bi me-2" width="16" height="16"><use xlink:href="#home" /></svg>
+                            @category.Name
+                        </a>
+                    </li>
+                    <br />
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-9 col-sm-12">
+       <div class="container">
+            <h3>@ViewBag.CategoryName</h3>
+            <div class="row">
+                @foreach (var product in Model)
+                {
+                    @if (product.Id is not null)
+                    {
+                        <div class="col-md-4 col-sm-12">
+                            <div class="card p-2 mb-2" style="height:450px">
+                                <div class="card-header">
+                                    <img src="/images/@product.Image" height="200" class="card-img-top" />
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-title">@product.Name</p>
+                                    <p class="card-text">@product.Description</p>
+                                    <p class="card-text">@product.UnitPrice?.ToString("C2")</p>
+                                </div>
+                                <div class="card-footer">
+                                    <a asp-controller="Cart" asp-action="AddToCart" class="btn d-block btn-dark" asp-route-id="@product.Id">Sepete Ekle</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+       </div>
+    </div>
+</div>
+
+

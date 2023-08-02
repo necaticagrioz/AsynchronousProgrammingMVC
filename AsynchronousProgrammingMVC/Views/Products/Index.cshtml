@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+@model List<ProductVM>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Ürün Listesi</h3>
+            </div>
+            <div class="card-body">
+                <div class="table table-responsive">
+                    <table class="table table-bordered table-responsive-md">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Ürün Ad</th>
+                                <th>Açıklama</th>
+                                <th>Birim Fiyat</th>
+                                <th>Kategori</th>
+                                <th>Görsel</th>
+                                <th>Durum</th>
+                                <th>Eklenme Tarihi</th>
+                                <th>Güncellenme Tarihi</th>
+                                <th>Güncelle</th>
+                                <th>Sil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model)
+                            {
+                                <tr>
+                                    <td>@product.Id</td>
+                                    <td>@product.Name</td>
+                                    <td>@product.Description</td>
+                                    <td>@product.UnitPrice.ToString("C2")</td>
+                                    <td>@product.CategoryName</td>
+                                    <td>
+                                        <img src="/images/@product.Image" width="50" height="50" />
+                                    </td>
+                                    <td>@product.Status</td>
+                                    <td>@product.CreatedDate</td>
+                                    @if (product.UpdatedDate is not null)
+                                    {
+                                        <td>@product.UpdatedDate</td>
+                                    }
+                                    else
+                                    {
+                                        <td> - </td>
+                                    }
+                                    <td>
+                                        <a asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@product.Id" class="btn btn-outline-success">Güncelle</a>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-@product.Id">
+                                            Sil
+                                        </button>
+                                        <div class="modal fade" id="exampleModal-@product.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Silme Uyarısı</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Silmek istediğinize emin misiniz?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                        <a asp-controller="Products" asp-action="DeleteProduct" asp-route-id="@product.Id" type="button" class="btn btn-primary">Sil</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <a asp-controller="Products" asp-action="AddProduct" class="btn btn-outline-primary d-block">Yeni Ürün Ekle</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Button trigger modal -->
